@@ -1,4 +1,5 @@
 import { AccordionServices } from "./AccordionServices";
 import { Calendar } from "./Calendar";
+import { TimePicker } from "./TimePicker";
 
-export { AccordionServices, Calendar }
+export { AccordionServices, Calendar, TimePicker }

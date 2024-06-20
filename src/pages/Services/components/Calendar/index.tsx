@@ -22,8 +22,8 @@ interface CalendarProps {
 export const Calendar: React.FC<CalendarProps> = ({ selectedDate, onDateSelected }) => {
   const [currentDate] = useState(() => { return dayjs().set('date', 1) })
 
-  const currentMonth = currentDate.format('MMMM')
-  const currentYear = currentDate.format('YYYY')
+  const currentMonth = currentDate.locale('pt-bt').format('MMMM')
+  const currentYear = currentDate.locale('pt-bt').format('YYYY')
 
   const shortWeekDays = getWeekDays({ short: true })
 
@@ -114,10 +114,10 @@ export const Calendar: React.FC<CalendarProps> = ({ selectedDate, onDateSelected
           {currentMonth} <span>{currentYear}</span>
         </div>
         <div className="flex gap-1 text-neutral-200">
-          <Button variant="ghost" size={"icon"} title="Previous month" className="leading-none rounded-sm w-min">
+          <Button variant="link" size={"icon"} title="Previous month" className="leading-none rounded-sm">
             <ChevronLeft className="size-5" />
           </Button>
-          <Button variant="ghost" size={"icon"} title="Next month" className="leading-none rounded-sm">
+          <Button variant="link" size={"icon"} title="Next month" className="leading-none rounded-sm">
             <ChevronRight className="size-5" />
           </Button>
         </div>
@@ -140,7 +140,7 @@ export const Calendar: React.FC<CalendarProps> = ({ selectedDate, onDateSelected
                     <Button
                       onClick={() => onDateSelected(date.toDate())}
                       disabled={disabled}
-                      className={`absolute top-0 left-0 right-0 w-full mx-auto text-[14px] font-medium bg-secondary hover:bg-[#6D28D9] size-[51px] text-white text-center transition border-2 border-r-transparent rounded-md disabled:cursor-default disabled:border-transparent disabled:font-normal disabled:bg-transparent ${isSelectedDate(date) ? 'bg-[#6D28D9] hover:bg-[#6D28D9]' : 'bg-secondary hover:bg-secondary'}`}>
+                      className={`absolute top-0 left-0 right-0 w-full mx-auto text-[14px] font-medium bg-secondary hover:bg-[#6D28D9] size-[51px] text-white text-center transition rounded-md disabled:cursor-default disabled:font-normal disabled:bg-transparent ${isSelectedDate(date) ? 'bg-[#6D28D9] hover:bg-[#6D28D9]' : 'bg-secondary hover:bg-secondary'}`}>
                       {date.get('date')}
                       {isCurrentDay(date) && <span className="absolute bg-white rounded-full bottom-2 size-1.5" />}
                     </Button>

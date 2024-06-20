@@ -1,10 +1,13 @@
 import logo from '@/assets/logo.svg'
-import { AccordionServices, Calendar } from './components'
+import { AccordionServices, Calendar, TimePicker } from './components'
 import { useState } from 'react'
 
 export const Services = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [selectedServices, setSelectedServices] = useState<Array<string>>([])
+
+  const isServicesSelected = selectedServices.length > 0
+  const isDateSelected = !!selectedDate
 
   function handleServiceSelected(serviceId: string) {
     setSelectedServices(state => {
@@ -26,8 +29,12 @@ export const Services = () => {
         </div>
         <AccordionServices selectedServices={selectedServices} onServiceSelected={handleServiceSelected} />
         {
-          selectedServices.length > 0 &&
+          isServicesSelected &&
           <Calendar selectedDate={selectedDate} onDateSelected={setSelectedDate} />
+        }
+        {
+          isDateSelected &&
+          <TimePicker selectedDate={selectedDate} />
         }
       </div>
     </main>
