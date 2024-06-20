@@ -52,8 +52,8 @@ export const AccordionServices: React.FC<AccordionProps> = ({ selectedServices, 
 
   return (
     <>
-      <Accordion type="single" collapsible className='w-full '>
-        <AccordionItem className='border-0' value="item-1">
+      <Accordion type="single" collapsible defaultValue="services" className='w-full '>
+        <AccordionItem className='border-0' value="services">
           <AccordionTrigger className='hover:no-underline text-neutral-400 font-medium text-[14px]'>Selecione os Serviços</AccordionTrigger>
           <AccordionContent className='flex flex-row items-center max-w-full gap-2 overflow-x-auto'>
             {Services.map(({ id, name, price, time }) => {

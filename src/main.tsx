@@ -2,8 +2,8 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './globals.css'
 import { ThemeProvider } from './components/theme-provider'
-import { Routers } from './routes'
 import { RouterProvider } from 'react-router-dom'
+import { Routers } from './routes'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

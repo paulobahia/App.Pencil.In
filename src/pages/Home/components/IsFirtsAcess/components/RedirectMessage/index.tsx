@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom";
 
 interface RedirectMessageProps {
   isAuthNotification: boolean
@@ -6,15 +7,20 @@ interface RedirectMessageProps {
 
 export const RedirectMessage: React.FC<RedirectMessageProps> = ({ isAuthNotification }) => {
   const [showSecondMessage, setShowSecondMessage] = useState<boolean>(false)
+  const navigate = useNavigate();
 
   useEffect(() => {
     const secondMessage = setTimeout(() => {
       setShowSecondMessage(true);
     }, 1000);
 
+    const redirect = setTimeout(() => {
+      navigate('/services')
+    }, 5000);
 
     return () => {
       clearTimeout(secondMessage)
+      clearTimeout(redirect)
       setShowSecondMessage(false)
     }
   }, [])

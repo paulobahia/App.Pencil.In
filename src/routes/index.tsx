@@ -1,13 +1,15 @@
 import { Home, Services } from '@/pages'
-import { createBrowserRouter } from 'react-router-dom'
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Route,
+} from "react-router-dom";
 
-export const Routers = createBrowserRouter([
-  {
-    path: "/",
-    element: <Home />,
-  },
-  {
-    path: "/services",
-    element: <Services />,
-  }
-])
+export const Routers = createBrowserRouter(
+  createRoutesFromElements(
+    <Route>
+      <Route path="/" element={<Home />} />
+      <Route path="/services" element={<Services />} />
+    </Route>
+  )
+)
