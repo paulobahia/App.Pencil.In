@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom";
 
 interface RedirectMessageProps {
   isAuthNotification: boolean
@@ -7,20 +6,14 @@ interface RedirectMessageProps {
 
 export const RedirectMessage: React.FC<RedirectMessageProps> = ({ isAuthNotification }) => {
   const [showSecondMessage, setShowSecondMessage] = useState<boolean>(false)
-  const navigate = useNavigate();
 
   useEffect(() => {
     const secondMessage = setTimeout(() => {
       setShowSecondMessage(true);
     }, 1000);
 
-    const redirect = setTimeout(() => {
-      navigate('/services')
-    }, 5000);
-
     return () => {
       clearTimeout(secondMessage)
-      clearTimeout(redirect)
       setShowSecondMessage(false)
     }
   }, [])
@@ -32,7 +25,7 @@ export const RedirectMessage: React.FC<RedirectMessageProps> = ({ isAuthNotifica
           ?
           <div className="flex justify-end w-full">
             <div className="w-fit max-w-[80%] p-4 rounded-md bg-[#6D28D9]">
-              <span className="font-medium text-center text-white text-[14px]">
+              <span className="font-semibold text-[14px]">
                 Ativar Notificações
               </span>
             </div>
@@ -40,7 +33,7 @@ export const RedirectMessage: React.FC<RedirectMessageProps> = ({ isAuthNotifica
           :
           <div className="flex justify-end w-full">
             <div className="w-fit max-w-[80%] p-4 rounded-md bg-[#6D28D9]">
-              <span className="font-medium text-center text-white text-[14px]">
+              <span className="font-semibold text-[14px]">
                 Pular
               </span>
             </div>

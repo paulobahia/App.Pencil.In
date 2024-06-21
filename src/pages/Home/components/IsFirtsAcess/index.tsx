@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { FormName, FormPhone, NotificationAuthRequest } from "./components";
 import { RedirectMessage } from "./components/RedirectMessage";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 interface InfoUser {
   name: string;
@@ -8,6 +9,11 @@ interface InfoUser {
 }
 
 export const IsFirtsAcess = () => {
+  const navigate = useNavigate();
+
+  const [searchParams] = useSearchParams();
+  const id = searchParams.get('id');
+
   const [showSecondMessage, setShowSecondMessage] = useState<boolean>(false)
   const [showButtonNameSubmit, setButtonNameSubmit] = useState<boolean>(false)
   const [showFormPhone, setShowFormPhone] = useState<boolean>(false)
@@ -54,6 +60,11 @@ export const IsFirtsAcess = () => {
   function handleSubmitNotification(isAuth: boolean) {
     setShowRedirectMessage(true)
     setIsAuthNotification(isAuth)
+
+    setTimeout(() => {
+      const { name, phone } = infoUser
+      navigate(`/services?id=${id}&name=${name}&phone=${phone}`)
+    }, 5000);
   }
 
   return (

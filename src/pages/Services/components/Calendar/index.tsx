@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react"
 import dayjs from 'dayjs'
+import 'dayjs/locale/pt-br'
 import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { getWeekDays } from "@/lib/utils"
@@ -22,8 +23,8 @@ interface CalendarProps {
 export const Calendar: React.FC<CalendarProps> = ({ selectedDate, onDateSelected }) => {
   const [currentDate] = useState(() => { return dayjs().set('date', 1) })
 
-  const currentMonth = currentDate.locale('pt-bt').format('MMMM')
-  const currentYear = currentDate.locale('pt-bt').format('YYYY')
+  const currentMonth = currentDate.locale('pt-br').format('MMMM')
+  const currentYear = currentDate.format('YYYY')
 
   const shortWeekDays = getWeekDays({ short: true })
 

@@ -22,3 +22,11 @@ export function getWeekDays({ short = false }: GetWeekDaysParams = {}) {
       return weekDay.substring(0, 1).toUpperCase().concat(weekDay.substring(1))
     })
 }
+
+export function convertMinutesToTime(minutes: number): string {
+  const hours = Math.floor(minutes / 60);
+  const remainingMinutes = minutes % 60;
+  const formattedHours = hours.toString().padStart(2, '0');
+  const formattedMinutes = remainingMinutes.toString().padStart(2, '0');
+  return `${formattedHours}:${formattedMinutes}`;
+}
