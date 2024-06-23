@@ -30,3 +30,20 @@ export function convertMinutesToTime(minutes: number): string {
   const formattedMinutes = remainingMinutes.toString().padStart(2, '0');
   return `${formattedHours}:${formattedMinutes}`;
 }
+
+export function formatPhone(phoneNumber: string) {
+  let cleaned = ('' + phoneNumber).replace(/\D/g, '');
+
+  if (cleaned.startsWith('55') && cleaned.length === 13) {
+    cleaned = cleaned.substring(2);
+  }
+
+  if (cleaned.length === 11) {
+    const match = cleaned.match(/^(\d{2})(\d)(\d{4})(\d{4})$/);
+    if (match) {
+      return `(${match[1]}) ${match[2]} ${match[3]}-${match[4]}`;
+    }
+  }
+
+  return phoneNumber;
+}

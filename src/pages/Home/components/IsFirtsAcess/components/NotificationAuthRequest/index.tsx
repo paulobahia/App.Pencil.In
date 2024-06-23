@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button"
+import { formatPhone } from "@/lib/utils";
 import { useEffect, useState } from "react";
 
 interface NotificationAuthRequestProps {
@@ -27,23 +28,6 @@ export const NotificationAuthRequest: React.FC<NotificationAuthRequestProps> = (
       setShowOptions(false)
     }
   }, [])
-
-  function formatPhone(phoneNumber: string) {
-    let cleaned = ('' + phoneNumber).replace(/\D/g, '');
-
-    if (cleaned.startsWith('55') && cleaned.length === 13) {
-      cleaned = cleaned.substring(2);
-    }
-
-    if (cleaned.length === 11) {
-      const match = cleaned.match(/^(\d{2})(\d)(\d{4})(\d{4})$/);
-      if (match) {
-        return `(${match[1]}) ${match[2]} ${match[3]}-${match[4]}`;
-      }
-    }
-
-    return phoneNumber;
-  }
 
   function handleAuthNotification(isAuth: boolean) {
     setShowOptions(false)

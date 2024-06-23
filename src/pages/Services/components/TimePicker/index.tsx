@@ -3,6 +3,7 @@ import { DialogTrigger } from "@/components/ui/dialog"
 import { convertMinutesToTime } from "@/lib/utils"
 import dayjs from "dayjs"
 import 'dayjs/locale/pt-br'
+import { useEffect, useRef } from "react"
 
 interface Availability {
   possibleTimes: number[]
@@ -76,13 +77,22 @@ interface TimePickerProps {
 
 export const TimePicker: React.FC<TimePickerProps> = ({ selectedDate, onSubmit }) => {
 
+  const timePickerRef = useRef<HTMLDivElement>(null)
+
   const weekDay = selectedDate ? dayjs(selectedDate).locale('pt-br').format('ddd') : null
   const describedDate = selectedDate
     ? dayjs(selectedDate).locale('pt-br').format('YYYY')
     : null
 
+  useEffect(() => {
+    if (timePickerRef.current) {
+      timePickerRef.current.focus()
+      timePickerRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [])
+
   return (
-    <div className='flex flex-col w-full'>
+    <div ref={timePickerRef} className='flex flex-col w-full'>
       <div className='flex flex-row gap-1'>
         <span className='font-medium text-neutral-200 text-[14px]'>{weekDay}</span>
         <span className='font-normal text-neutral-400 text-[14px]'>{describedDate}</span>
@@ -90,7 +100,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({ selectedDate, onSubmit }
       <div className='grid grid-cols-3 gap-2 mt-3'>
         {availability.possibleTimes.map((hour) => {
           return (
-            <DialogTrigger asChild>
+            <DialogTrigger key={hour} asChild>
               <Button
                 onClick={() => onSubmit(hour)}
                 key={hour}

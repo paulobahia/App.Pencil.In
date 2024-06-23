@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 interface RedirectMessageProps {
   isAuthNotification: boolean
@@ -6,6 +6,8 @@ interface RedirectMessageProps {
 
 export const RedirectMessage: React.FC<RedirectMessageProps> = ({ isAuthNotification }) => {
   const [showSecondMessage, setShowSecondMessage] = useState<boolean>(false)
+
+  const secondMessageRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const secondMessage = setTimeout(() => {
@@ -18,6 +20,13 @@ export const RedirectMessage: React.FC<RedirectMessageProps> = ({ isAuthNotifica
     }
   }, [])
 
+  useEffect(() => {
+    if (showSecondMessage && secondMessageRef.current) {
+      secondMessageRef.current.focus()
+      secondMessageRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [showSecondMessage])
+
   return (
     <>
       {
@@ -25,7 +34,7 @@ export const RedirectMessage: React.FC<RedirectMessageProps> = ({ isAuthNotifica
           ?
           <div className="flex justify-end w-full">
             <div className="w-fit max-w-[80%] p-4 rounded-md bg-[#6D28D9]">
-              <span className="font-semibold text-[14px]">
+              <span className="font-medium text-center text-white text-[14px]">
                 Ativar Notificações
               </span>
             </div>
@@ -33,7 +42,7 @@ export const RedirectMessage: React.FC<RedirectMessageProps> = ({ isAuthNotifica
           :
           <div className="flex justify-end w-full">
             <div className="w-fit max-w-[80%] p-4 rounded-md bg-[#6D28D9]">
-              <span className="font-semibold text-[14px]">
+              <span className="font-medium text-center text-white text-[14px]">
                 Pular
               </span>
             </div>
@@ -47,7 +56,7 @@ export const RedirectMessage: React.FC<RedirectMessageProps> = ({ isAuthNotifica
         </div>
         {
           showSecondMessage &&
-          <div className="p-4 rounded-md bg-secondary max-w-[80%] w-fit fade-left">
+          <div ref={secondMessageRef} className="p-4 rounded-md bg-secondary max-w-[80%] w-fit fade-left">
             <span className="font-normal text-center text-white text-[14px]">
               Lá, você poderá escolher a data e o horário do serviço desejado no(a) Laura Fernandes - Brow Designer & Skin Care.
             </span>
