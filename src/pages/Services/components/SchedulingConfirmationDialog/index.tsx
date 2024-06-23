@@ -88,49 +88,45 @@ export const SchedulingConfirmationDialog: React.FC<SchedulingConfirmationDialog
         </div>
         <div className="flex flex-col gap-2.5">
           <Label className="text-xs" htmlFor="observation">Observação</Label>
-          <Textarea id="observation" placeholder="Por favor, compartilhe com a gente qualquer coisa que possa nos ajudar a prepara o melhor serviço para você." className='text-xs max-h-32' />
+          <Textarea autoFocus={false} id="observation" placeholder="Por favor, compartilhe com a gente qualquer coisa que possa nos ajudar a prepara o melhor serviço para você." className='text-xs max-h-32' />
         </div>
       </div>
-      <Separator />
       <div className='flex flex-col gap-4 px-4'>
-        <div className="flex flex-col gap-2.5">
-          <Label htmlFor="services">Serviços</Label>
-          <div className="rounded-md">
-            <Table>
-              <TableHeader className="text-sm font-normal">
-                <TableRow>
-                  <TableHead>
-                    Serviço
-                  </TableHead>
-                  <TableHead className="text-center">
-                    Duração
-                  </TableHead>
-                  <TableHead className="text-end">
-                    Valor
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {
-                  filteredServices.map((row) => {
-                    return (
-                      <TableRow key={row.id} className="border-0 hover:bg-transparent">
-                        <TableCell className="py-0 pt-3 text-[12px] font-semibold min-w-max">
-                          {row.name}
-                        </TableCell>
-                        <TableCell className="py-0 pt-3 text-[12px] font-semibold text-center min-w-max">
-                          {convertMinutesToTime(row.time)}h
-                        </TableCell>
-                        <TableCell className="py-0 pt-3 text-[12px] font-semibold min-w-max text-end">
-                          R$ {row.price}
-                        </TableCell>
-                      </TableRow>
-                    )
-                  })
-                }
-              </TableBody>
-            </Table>
-          </div>
+        <div className="rounded-md">
+          <Table>
+            <TableHeader className="text-sm font-normal [&_tr]:border-0 ">
+              <TableRow className="hover:bg-transparent">
+                <TableHead className="h-10">
+                  Serviço
+                </TableHead>
+                <TableHead className="h-10 text-center">
+                  Duração
+                </TableHead>
+                <TableHead className="h-10 text-end">
+                  Valor
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {
+                filteredServices.map((row) => {
+                  return (
+                    <TableRow key={row.id} className="border-0 hover:bg-transparent">
+                      <TableCell className="py-0 pt-3 text-[12px] font-semibold min-w-max">
+                        {row.name}
+                      </TableCell>
+                      <TableCell className="py-0 pt-3 text-[12px] font-semibold text-center min-w-max">
+                        {convertMinutesToTime(row.time)}h
+                      </TableCell>
+                      <TableCell className="py-0 pt-3 text-[12px] font-semibold min-w-max text-end">
+                        R$ {row.price}
+                      </TableCell>
+                    </TableRow>
+                  )
+                })
+              }
+            </TableBody>
+          </Table>
         </div>
       </div>
       <Separator />

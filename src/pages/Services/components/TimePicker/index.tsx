@@ -92,12 +92,12 @@ export const TimePicker: React.FC<TimePickerProps> = ({ selectedDate, onSubmit }
   }, [])
 
   return (
-    <div ref={timePickerRef} className='flex flex-col w-full'>
+    <div className='flex flex-col w-full'>
       <div className='flex flex-row gap-1'>
         <span className='font-medium text-neutral-200 text-[14px]'>{weekDay}</span>
         <span className='font-normal text-neutral-400 text-[14px]'>{describedDate}</span>
       </div>
-      <div className='grid grid-cols-3 gap-2 mt-3'>
+      <div ref={timePickerRef} className='grid grid-cols-3 gap-2 mt-3'>
         {availability.possibleTimes.map((hour) => {
           return (
             <DialogTrigger key={hour} asChild>
