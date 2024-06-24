@@ -1,10 +1,10 @@
-import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form"
 import { PhoneInput } from "@/components/ui/phone-input";
 import { useForm } from "react-hook-form";
 import { isValidPhoneNumber } from "react-phone-number-input";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ActionButton } from "@/components";
 
 interface FormPhoneProps {
   onSubmit: (phone: string) => void;
@@ -51,11 +51,9 @@ export const FormPhone: React.FC<FormPhoneProps> = ({ onSubmit, name }) => {
                 </FormItem>
               )}
             />
-            <Button variant="default" className="bg-[#6D28D9] hover:bg-[#6D28D9]/50 text-white gap-2 flex w-full" >
-              <span className="font-semibold text-[14px]">
-                Finalizar Cadastro
-              </span>
-            </Button>
+            <ActionButton>
+              Finalizar Cadastro
+            </ActionButton>
           </form>
         </Form>
       </div>

@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { ActionButton } from "@/components";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -41,11 +41,9 @@ export const FormName: React.FC<FormNameProps> = ({ onSubmit }) => {
               </FormItem>
             )}
           />
-          <Button variant="default" className="bg-[#6D28D9] hover:bg-[#6D28D9]/50 text-white gap-2 flex w-full" >
-            <span className="font-semibold text-[14px]">
-              Próximo Passo
-            </span>
-          </Button>
+          <ActionButton>
+            Próximo Passo
+          </ActionButton>
         </form>
       </Form>
     </div>

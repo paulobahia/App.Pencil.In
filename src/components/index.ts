@@ -1,4 +1,3 @@
-import { IsFirtsAcess } from "../pages/Home/components/IsFirtsAcess";
-import { NotFirtsAcess } from "./NotFirtsAcess";
+import { ActionButton } from "./ActionButton";
 
-export { IsFirtsAcess, NotFirtsAcess }
+export { ActionButton }

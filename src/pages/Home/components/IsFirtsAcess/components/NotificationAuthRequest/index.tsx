@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+import { ActionButton } from "@/components";
 import { formatPhone } from "@/lib/utils";
 import { useEffect, useState } from "react";
 
@@ -64,16 +64,12 @@ export const NotificationAuthRequest: React.FC<NotificationAuthRequestProps> = (
       {
         showOptions &&
         <div className="flex flex-col gap-5 fade-left">
-          <Button onClick={() => handleAuthNotification(true)} variant="default" className="bg-[#6D28D9] hover:bg-[#6D28D9]/50 text-white gap-2 flex w-full" >
-            <span className="font-semibold text-[14px]">
-              Ativar Notificações
-            </span>
-          </Button>
-          <Button onClick={() => handleAuthNotification(false)} variant="default" className="flex w-full gap-2 text-white bg-secondary hover:bg-secondary/50" >
-            <span className="font-semibold text-[14px]">
-              Pular
-            </span>
-          </Button>
+          <ActionButton onClick={() => handleAuthNotification(true)}>
+            Ativar Notificações
+          </ActionButton>
+          <ActionButton onClick={() => handleAuthNotification(false)} className="flex w-full gap-2 text-white bg-secondary hover:bg-secondary/50">
+            Pular
+          </ActionButton>
         </div>
       }
     </>
