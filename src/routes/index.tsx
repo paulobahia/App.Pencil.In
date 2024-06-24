@@ -1,4 +1,4 @@
-import { Home, Services } from '@/pages'
+import { Home, SchedulingConfirmation, Services } from '@/pages'
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -10,6 +10,7 @@ export const Routers = createBrowserRouter(
     <Route>
       <Route path="/" element={<Home />} />
       <Route path="/services" element={<Services />} />
+      <Route path="/scheduling-confirmation" element={<SchedulingConfirmation />} />
     </Route>
   )
 )

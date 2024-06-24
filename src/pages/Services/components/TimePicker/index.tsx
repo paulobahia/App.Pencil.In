@@ -72,10 +72,10 @@ const availability: Availability = {
 
 interface TimePickerProps {
   selectedDate: Date | null
-  onSubmit: (hour: number) => void
+  onTimeSelected: (number: number) => void
 }
 
-export const TimePicker: React.FC<TimePickerProps> = ({ selectedDate, onSubmit }) => {
+export const TimePicker: React.FC<TimePickerProps> = ({ selectedDate, onTimeSelected }) => {
 
   const timePickerRef = useRef<HTMLDivElement>(null)
 
@@ -102,7 +102,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({ selectedDate, onSubmit }
           return (
             <DialogTrigger key={hour} asChild>
               <Button
-                onClick={() => onSubmit(hour)}
+                onClick={() => onTimeSelected(hour)}
                 key={hour}
                 variant={"outline"}
                 disabled={!availability.availableTimes.includes(hour)}

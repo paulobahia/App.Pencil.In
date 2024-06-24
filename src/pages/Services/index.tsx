@@ -1,8 +1,10 @@
 import logo from '@/assets/logo.svg'
 import { AccordionServices, Calendar, SchedulingConfirmationDialog, TimePicker } from './components'
 import { useState } from 'react'
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Dialog } from "@/components/ui/dialog"
+import { toast } from 'sonner';
+import { convertMinutesToTime } from '@/lib/utils';
 
 interface ServiceType {
   id: string;
@@ -39,6 +41,8 @@ const fakeServices: ServiceType[] = [
 ]
 
 export const Services = () => {
+  const navigate = useNavigate();
+
   const [searchParams] = useSearchParams();
   const id = searchParams.get('id');
   const name = searchParams.get('name');
@@ -47,6 +51,8 @@ export const Services = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [selectedTime, setSelectedTime] = useState<number | null>(null)
   const [selectedServices, setSelectedServices] = useState<Array<string>>([])
+
+  const [isPendingConfirmation, setIsPendingConfirmation] = useState<boolean>(false)
 
   const isServicesSelected = selectedServices.length > 0
   const isDateSelected = !!selectedDate
@@ -61,13 +67,20 @@ export const Services = () => {
     });
   }
 
-  function handleSubmitTime(hour: number) {
-    setSelectedTime(hour)
+  function handleSchedulingConfirmation() {
+    setIsPendingConfirmation(true)
+    toast.success('Sucesso', { description: 'Agendamento realizado com sucesso.' })
+    const filteredServices = fakeServices.filter(service => selectedServices.includes(service.id));
+    if (selectedTime) {
+      const formatedTime = convertMinutesToTime(selectedTime)
+      navigate(`/scheduling-confirmation?id=${id}`, { state: { services: filteredServices, schedulingDate: selectedDate, schedulingTime: formatedTime } })
+    }
+
     console.log(id)
     console.log(name)
     console.log(phone)
-    console.log(hour)
   }
+
 
   return (
     <main className="flex justify-center min-h-screen antialiased bg-background">
@@ -85,10 +98,10 @@ export const Services = () => {
           }
           {
             isDateSelected &&
-            <TimePicker selectedDate={selectedDate} onSubmit={handleSubmitTime} />
+            <TimePicker selectedDate={selectedDate} onTimeSelected={setSelectedTime} />
           }
         </div>
-        <SchedulingConfirmationDialog services={fakeServices} name={name} phone={phone} selectedTime={selectedTime} selectedDate={selectedDate} selectedServices={selectedServices}/>
+        <SchedulingConfirmationDialog onSubmit={handleSchedulingConfirmation} isLoading={isPendingConfirmation} services={fakeServices} selectedTime={selectedTime} selectedDate={selectedDate} selectedServices={selectedServices} />
       </Dialog>
     </main >
   )

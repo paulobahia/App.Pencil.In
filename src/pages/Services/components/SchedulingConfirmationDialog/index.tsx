@@ -1,18 +1,19 @@
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Loading } from "@/components/ui/loading"
 import { Separator } from "@/components/ui/separator"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Textarea } from "@/components/ui/textarea"
 import { convertMinutesToTime, formatPhone } from "@/lib/utils"
 import dayjs from "dayjs"
 import { CalendarDays, Clock } from "lucide-react"
+import { useSearchParams } from "react-router-dom"
 
 interface SchedulingConfirmationDialogProps {
-  name: string | null
-  phone: string | null
+  onSubmit: () => void
   selectedTime: number | null
   selectedDate: Date | null
   selectedServices: string[]
@@ -22,9 +23,13 @@ interface SchedulingConfirmationDialogProps {
     price: string;
     time: number;
   }[]
+  isLoading: boolean
 }
 
-export const SchedulingConfirmationDialog: React.FC<SchedulingConfirmationDialogProps> = ({ services, name, phone, selectedDate, selectedTime, selectedServices }) => {
+export const SchedulingConfirmationDialog: React.FC<SchedulingConfirmationDialogProps> = ({ services, selectedDate, selectedTime, selectedServices, onSubmit, isLoading }) => {
+  const [searchParams] = useSearchParams();
+  const name = searchParams.get('name');
+  const phone = searchParams.get('phone');
 
   const describedDate = selectedDate
     ? dayjs(selectedDate).locale('pt-br').format('dddd, DD [de] MMMM [de] YYYY')
@@ -131,8 +136,20 @@ export const SchedulingConfirmationDialog: React.FC<SchedulingConfirmationDialog
       </div>
       <Separator />
       <div className='flex flex-row justify-end gap-2 px-4'>
-        <Button size={'default'} variant={'ghost'}>Voltar</Button>
-        <Button size={'default'}>Confirmar</Button>
+        <DialogClose asChild>
+          <Button disabled={isLoading} variant={'ghost'}>Voltar</Button>
+        </DialogClose>
+        <Button disabled={isLoading} onClick={onSubmit} className="min-w-24">
+          {
+            isLoading
+              ?
+              <Loading />
+              :
+              <span>
+                Confirmar
+              </span>
+          }
+        </Button>
       </div>
     </DialogContent>
   )

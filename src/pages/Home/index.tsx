@@ -1,6 +1,6 @@
-import { IsFirtsAcess } from "@/components"
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
+import { IsFirtsAcess } from "./components";
 
 export const Home: React.FC = () => {
   const [searchParams] = useSearchParams();
