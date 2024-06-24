@@ -1,5 +1,6 @@
 import { ActionButton } from "@/components";
 import dayjs from "dayjs";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 interface SchedulingConfirmationMessageState {
@@ -17,6 +18,40 @@ export const SchedulingConfirmationMessage = () => {
   const location = useLocation();
   const { services, schedulingDate, schedulingTime } = location.state as SchedulingConfirmationMessageState;
 
+  const [showSecondMessage, setShowSecondMessage] = useState<boolean>(false)
+  const [showThirdMessage, setShowThirdMessage] = useState<boolean>(false)
+  const [showFourthMessage, setShowFourthMessage] = useState<boolean>(false)
+  const [showOptions, setShowOptions] = useState<boolean>(false)
+
+  useEffect(() => {
+    const secondMessage = setTimeout(() => {
+      setShowSecondMessage(true);
+    }, 1000);
+
+    const thirdMessage = setTimeout(() => {
+      setShowThirdMessage(true);
+    }, 1500);
+
+    const fourtMessage = setTimeout(() => {
+      setShowThirdMessage(true);
+    }, 2000);
+
+    const options = setTimeout(() => {
+      setShowOptions(true);
+    }, 2300);
+
+    return () => {
+      clearTimeout(secondMessage)
+      clearTimeout(thirdMessage)
+      clearTimeout(fourtMessage)
+      clearTimeout(options)
+      setShowSecondMessage(false)
+      setShowThirdMessage(false)
+      setShowFourthMessage(false)
+      setShowOptions(false)
+    }
+  }, [])
+
   const describeServices = services
     .map(services => `${services.name} - R$ ${services.price}`)
     .join(', ')
@@ -30,33 +65,45 @@ export const SchedulingConfirmationMessage = () => {
           Agendamento confirmado...
         </span>
       </div>
-      <div className="p-4 rounded-md bg-secondary max-w-[80%] w-fit fade-left">
-        <span className="font-normal text-center text-white text-[14px]">
-          Serviços selecionados: Um(a) {" "}
-          <span className="font-medium">
-            {describeServices}, {" "}
+      {
+        showSecondMessage &&
+        <div className="p-4 rounded-md bg-secondary max-w-[80%] w-fit fade-left">
+          <span className="font-normal text-center text-white text-[14px]">
+            Serviços selecionados: Um(a) {" "}
+            <span className="font-medium">
+              {describeServices}, {" "}
+            </span>
+            com o(a) Laura Fernandes no(a) {describeSchedulingdate} ás {schedulingTime}.
           </span>
-          com o(a) Laura Fernandes no(a) {describeSchedulingdate} ás {schedulingTime}.
-        </span>
-      </div>
-      <div className="p-4 rounded-md bg-secondary max-w-[80%] w-fit fade-left">
-        <span className="font-normal text-center text-white text-[14px]">
-          O local é o de sempre, Rua Jordão, 83, Ipatinga MG.
-        </span>
-      </div>
-      <div className="p-4 rounded-md bg-secondary max-w-[80%] w-fit fade-left">
-        <span className="font-normal text-center text-white text-[14px]">
-          Agradecemos pela preferencia, e esperamos te ver novamente em breve.
-        </span>
-      </div>
-      <div className="flex flex-col gap-3 mt-3">
-        <ActionButton>
-          Meus agendamentos
-        </ActionButton>
-        <ActionButton>
-          Novo agendamento
-        </ActionButton>
-      </div>
+        </div>
+      }
+      {
+        showThirdMessage &&
+        <div className="p-4 rounded-md bg-secondary max-w-[80%] w-fit fade-left">
+          <span className="font-normal text-center text-white text-[14px]">
+            O local é o de sempre, Rua Jordão, 83, Ipatinga MG.
+          </span>
+        </div>
+      }
+      {
+        showFourthMessage &&
+        <div className="p-4 rounded-md bg-secondary max-w-[80%] w-fit fade-left">
+          <span className="font-normal text-center text-white text-[14px]">
+            Agradecemos pela preferencia, e esperamos te ver novamente em breve.
+          </span>
+        </div>
+      }
+      {
+        showOptions &&
+        <div className="flex flex-col gap-3 mt-3 fade-left">
+          <ActionButton>
+            Meus agendamentos
+          </ActionButton>
+          <ActionButton>
+            Novo agendamento
+          </ActionButton>
+        </div>
+      }
     </div>
   )
 } 
