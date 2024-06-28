@@ -1,6 +1,6 @@
 import { ActionButton } from "@/components";
 import { formatPhone } from "@/lib/utils";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface NotificationAuthRequestProps {
   name: string;
@@ -11,6 +11,8 @@ interface NotificationAuthRequestProps {
 export const NotificationAuthRequest: React.FC<NotificationAuthRequestProps> = ({ name, phone, onSubmit }) => {
   const [showSecondMessage, setShowSecondMessage] = useState<boolean>(false)
   const [showOptions, setShowOptions] = useState<boolean>(false)
+
+  const optionsRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const secondMessage = setTimeout(() => {
@@ -28,6 +30,13 @@ export const NotificationAuthRequest: React.FC<NotificationAuthRequestProps> = (
       setShowOptions(false)
     }
   }, [])
+
+  useEffect(() => {
+    if (showOptions && optionsRef.current) {
+      optionsRef.current.focus()
+      optionsRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [showOptions])
 
   function handleAuthNotification(isAuth: boolean) {
     setShowOptions(false)
@@ -63,7 +72,7 @@ export const NotificationAuthRequest: React.FC<NotificationAuthRequestProps> = (
       }
       {
         showOptions &&
-        <div className="flex flex-col gap-5 fade-left">
+        <div ref={optionsRef} className="flex flex-col gap-5 fade-left">
           <ActionButton onClick={() => handleAuthNotification(true)}>
             Ativar Notificações
           </ActionButton>
