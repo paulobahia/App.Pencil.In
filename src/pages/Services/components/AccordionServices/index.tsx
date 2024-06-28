@@ -1,11 +1,10 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
+import { useBookingContext } from "@/hooks/useBookingContext";
 import { convertMinutesToTime } from "@/lib/utils";
 
 interface AccordionProps {
-  selectedServices: string[]
-  onServiceSelected: (serviceId: string) => void
   services: {
     id: string;
     name: string;
@@ -14,7 +13,19 @@ interface AccordionProps {
   }[]
 }
 
-export const AccordionServices: React.FC<AccordionProps> = ({ selectedServices, onServiceSelected, services }) => {
+export const AccordionServices: React.FC<AccordionProps> = ({ services }) => {
+
+  const { selectedServices, setSelectedServices, } = useBookingContext();
+
+  function handleServiceSelected(serviceId: string) {
+    setSelectedServices(state => {
+      if (state.includes(serviceId)) {
+        return state.filter(service => service !== serviceId);
+      } else {
+        return [...state, serviceId];
+      }
+    });
+  }
 
   function isServiceSelected(serviceId: string) {
     if (selectedServices.includes(serviceId)) {
@@ -31,7 +42,7 @@ export const AccordionServices: React.FC<AccordionProps> = ({ selectedServices, 
           <AccordionContent className='flex flex-row items-center max-w-full gap-2 overflow-x-auto'>
             {services.map(({ id, name, price, time }) => {
               return (
-                <Button onClick={() => onServiceSelected(id)} key={id} className={`flex flex-col justify-between p-3 rounded-md min-w-32 min-h-32 ${isServiceSelected(id) ? 'bg-[#6D28D9] hover:bg-[#6D28D9]' : 'bg-secondary hover:bg-secondary'} `}>
+                <Button onClick={() => handleServiceSelected(id)} key={id} className={`flex flex-col justify-between p-3 rounded-md min-w-32 min-h-32 ${isServiceSelected(id) ? 'bg-[#6D28D9] hover:bg-[#6D28D9]' : 'bg-secondary hover:bg-secondary'} `}>
                   <div className='flex justify-end w-full'>
                     <Checkbox id={id} checked={isServiceSelected(id)} />
                   </div>

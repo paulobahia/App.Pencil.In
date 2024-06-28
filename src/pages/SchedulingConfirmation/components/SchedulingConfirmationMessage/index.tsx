@@ -1,7 +1,8 @@
 import { ActionButton } from "@/components";
 import dayjs from "dayjs";
+import localforage from "localforage";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
 interface SchedulingConfirmationMessageState {
   services: {
@@ -15,7 +16,12 @@ interface SchedulingConfirmationMessageState {
 }
 
 export const SchedulingConfirmationMessage = () => {
+  const navigate = useNavigate();
   const location = useLocation();
+
+  const [searchParams] = useSearchParams();
+  const id = searchParams.get('id');
+
   const { services, schedulingDate, schedulingTime } = location.state as SchedulingConfirmationMessageState;
 
   const [showSecondMessage, setShowSecondMessage] = useState<boolean>(false)
@@ -33,7 +39,7 @@ export const SchedulingConfirmationMessage = () => {
     }, 1500);
 
     const fourtMessage = setTimeout(() => {
-      setShowThirdMessage(true);
+      setShowFourthMessage(true);
     }, 2000);
 
     const options = setTimeout(() => {
@@ -57,6 +63,23 @@ export const SchedulingConfirmationMessage = () => {
     .join(', ')
 
   const describeSchedulingdate = dayjs(schedulingDate).locale('pt-br').format('dddd, DD [de] MMMM [de] YYYY')
+
+  async function goToSchedules() {
+    await localforage.getItem<PencinIn_User>('@Pencin.In:User')
+      .then((response) => {
+        if (response) {
+          const { phone } = response
+          navigate(`/my-schedules?phone=${phone}`)
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+
+  function goToHome() {
+    navigate(`/?id=${id}`)
+  }
 
   return (
     <div className="flex flex-col w-full gap-5">
@@ -96,12 +119,12 @@ export const SchedulingConfirmationMessage = () => {
       {
         showOptions &&
         <div className="flex flex-col gap-3 mt-3 fade-left">
-          <ActionButton>
+          <ActionButton onClick={goToSchedules}>
             Meus agendamentos
           </ActionButton>
-          <ActionButton>
+          <ActionButton onClick={goToHome}>
             Novo agendamento
-          </ActionButton>
+          </ActionButton >
         </div>
       }
     </div>

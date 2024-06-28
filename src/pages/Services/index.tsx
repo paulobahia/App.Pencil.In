@@ -1,10 +1,11 @@
 import logo from '@/assets/logo.svg'
 import { AccordionServices, Calendar, SchedulingConfirmationDialog, TimePicker } from './components'
-import { useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Dialog } from "@/components/ui/dialog"
 import { toast } from 'sonner';
 import { convertMinutesToTime } from '@/lib/utils';
+import localForage from "localforage";
+import { useBookingContext } from '@/hooks/useBookingContext';
 
 interface ServiceType {
   id: string;
@@ -13,7 +14,7 @@ interface ServiceType {
   time: number;
 }
 
-const fakeServices: ServiceType[] = [
+export const fakeServices: ServiceType[] = [
   {
     id: '1',
     name: 'Sobrancelha',
@@ -48,39 +49,33 @@ export const Services = () => {
   const name = searchParams.get('name');
   const phone = searchParams.get('phone');
 
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null)
-  const [selectedTime, setSelectedTime] = useState<number | null>(null)
-  const [selectedServices, setSelectedServices] = useState<Array<string>>([])
-
-  const [isPendingConfirmation, setIsPendingConfirmation] = useState<boolean>(false)
-
-  const isServicesSelected = selectedServices.length > 0
-  const isDateSelected = !!selectedDate
-
-  function handleServiceSelected(serviceId: string) {
-    setSelectedServices(state => {
-      if (state.includes(serviceId)) {
-        return state.filter(service => service !== serviceId);
-      } else {
-        return [...state, serviceId];
-      }
-    });
-  }
+  const {
+    isDateSelected,
+    isServicesSelected,
+    selectedDate,
+    selectedServices,
+    selectedTime,
+    setIsPendingConfirmation,
+    reset
+  } = useBookingContext();
 
   function handleSchedulingConfirmation() {
+    if (name && phone) {
+      localForage.setItem<PencinIn_User>('@Pencin.In:User',
+        {
+          name,
+          phone,
+          date: Date.now().toString()
+        }
+      )
+    }
     setIsPendingConfirmation(true)
     toast.success('Sucesso', { description: 'Agendamento realizado com sucesso.' })
     const filteredServices = fakeServices.filter(service => selectedServices.includes(service.id));
-    if (selectedTime) {
-      const formatedTime = convertMinutesToTime(selectedTime)
-      navigate(`/scheduling-confirmation?id=${id}`, { state: { services: filteredServices, schedulingDate: selectedDate, schedulingTime: formatedTime } })
-    }
-
-    console.log(id)
-    console.log(name)
-    console.log(phone)
+    const formatedTime = convertMinutesToTime(selectedTime!)
+    navigate(`/scheduling-confirmation?id=${id}`, { state: { services: filteredServices, schedulingDate: selectedDate, schedulingTime: formatedTime } })
+    reset()
   }
-
 
   return (
     <main className="flex justify-center min-h-screen antialiased bg-background">
@@ -91,17 +86,17 @@ export const Services = () => {
             <span className='text-[14px] font-medium'>Laura Fernandes</span>
             <span className='font-normal text-neutral-500'>Laura Fernandes - Brow Designer & Skin Care</span>
           </div>
-          <AccordionServices selectedServices={selectedServices} onServiceSelected={handleServiceSelected} services={fakeServices} />
+          <AccordionServices services={fakeServices} />
           {
             isServicesSelected &&
-            <Calendar selectedDate={selectedDate} onDateSelected={setSelectedDate} />
+            <Calendar />
           }
           {
             isDateSelected &&
-            <TimePicker selectedDate={selectedDate} onTimeSelected={setSelectedTime} />
+            <TimePicker />
           }
         </div>
-        <SchedulingConfirmationDialog onSubmit={handleSchedulingConfirmation} isLoading={isPendingConfirmation} services={fakeServices} selectedTime={selectedTime} selectedDate={selectedDate} selectedServices={selectedServices} />
+        <SchedulingConfirmationDialog onSubmit={handleSchedulingConfirmation} services={fakeServices} />
       </Dialog>
     </main >
   )

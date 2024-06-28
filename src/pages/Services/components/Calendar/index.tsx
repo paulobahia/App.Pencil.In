@@ -4,6 +4,7 @@ import 'dayjs/locale/pt-br'
 import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { getWeekDays } from "@/lib/utils"
+import { useBookingContext } from "@/hooks/useBookingContext"
 
 interface CalendarWeek {
   week: number
@@ -15,12 +16,13 @@ interface CalendarWeek {
 
 type CalendarWeeks = CalendarWeek[]
 
-interface CalendarProps {
-  selectedDate: Date | null
-  onDateSelected: (date: Date) => void
-}
+export const Calendar: React.FC = () => {
 
-export const Calendar: React.FC<CalendarProps> = ({ selectedDate, onDateSelected }) => {
+  const {
+    selectedDate,
+    setSelectedDate,
+  } = useBookingContext();
+
   const [currentDate] = useState(() => { return dayjs().set('date', 1) })
 
   const currentMonth = currentDate.locale('pt-br').format('MMMM')
@@ -139,7 +141,7 @@ export const Calendar: React.FC<CalendarProps> = ({ selectedDate, onDateSelected
                   ?
                   <div className="relative w-full pt-[100%]" key={date.toString()} >
                     <Button
-                      onClick={() => onDateSelected(date.toDate())}
+                      onClick={() => setSelectedDate(date.toDate())}
                       disabled={disabled}
                       className={`absolute top-0 left-0 right-0 w-full mx-auto text-[14px] font-medium bg-secondary hover:bg-[#6D28D9] size-[51px] text-white text-center transition rounded-md disabled:cursor-default disabled:font-normal disabled:bg-transparent ${isSelectedDate(date) ? 'bg-[#6D28D9] hover:bg-[#6D28D9]' : 'bg-secondary hover:bg-secondary'}`}>
                       {date.get('date')}

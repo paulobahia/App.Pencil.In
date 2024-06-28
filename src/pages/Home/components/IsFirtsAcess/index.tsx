@@ -68,36 +68,39 @@ export const IsFirtsAcess = () => {
   }
 
   return (
-    <div className="flex flex-col w-full gap-5">
-      <div className="p-4 rounded-md bg-secondary max-w-[80%] w-fit fade-left">
-        <span className="font-normal text-center text-white text-[14px]">
-          Olá, tudo bem? Sou a assistente virtual do(a) Laura Fernandes Brow Designer & Skin Care  e cuido do agendamento dos serviços dos profissionais dele(a), ok?
-        </span>
-      </div>
-      {
-        showSecondMessage &&
+    <>
+      <div className="h-20" />
+      <div className="flex flex-col w-full gap-5">
         <div className="p-4 rounded-md bg-secondary max-w-[80%] w-fit fade-left">
           <span className="font-normal text-center text-white text-[14px]">
-            Informe seu nome e telefone para que possamos prosseguir com o atendimento. Escreva seu nome e sobrenome.
+            Olá, tudo bem? Sou a assistente virtual do(a) Laura Fernandes Brow Designer & Skin Care e cuido do agendamento dos serviços dos profissionais dele(a), ok?
           </span>
         </div>
-      }
-      {
-        showButtonNameSubmit &&
-        <FormName onSubmit={handleSubmitName} />
-      }
-      {
-        showFormPhone &&
-        <FormPhone name={infoUser.name} onSubmit={handleSubmitPhone} />
-      }
-      {
-        showNotificationAuthRequest &&
-        <NotificationAuthRequest name={infoUser.name} phone={infoUser.phone} onSubmit={handleSubmitNotification} />
-      }
-      {
-        showRedirectMessage &&
-        <RedirectMessage isAuthNotification={isAuthNotification} />
-      }
-    </div>
+        {
+          showSecondMessage &&
+          <div className="p-4 rounded-md bg-secondary max-w-[80%] w-fit fade-left">
+            <span className="font-normal text-center text-white text-[14px]">
+              Informe seu nome e telefone para que possamos prosseguir com o atendimento. Escreva seu nome e sobrenome.
+            </span>
+          </div>
+        }
+        {
+          showButtonNameSubmit &&
+          <FormName onSubmit={handleSubmitName} />
+        }
+        {
+          showFormPhone &&
+          <FormPhone name={infoUser.name} onSubmit={handleSubmitPhone} />
+        }
+        {
+          showNotificationAuthRequest &&
+          <NotificationAuthRequest name={infoUser.name} phone={infoUser.phone} onSubmit={handleSubmitNotification} />
+        }
+        {
+          showRedirectMessage &&
+          <RedirectMessage isAuthNotification={isAuthNotification} />
+        }
+      </div>
+    </>
   )
 }

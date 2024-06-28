@@ -7,6 +7,7 @@ import { Loading } from "@/components/ui/loading"
 import { Separator } from "@/components/ui/separator"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Textarea } from "@/components/ui/textarea"
+import { useBookingContext } from "@/hooks/useBookingContext"
 import { convertMinutesToTime, formatPhone } from "@/lib/utils"
 import dayjs from "dayjs"
 import { CalendarDays, Clock } from "lucide-react"
@@ -14,22 +15,25 @@ import { useSearchParams } from "react-router-dom"
 
 interface SchedulingConfirmationDialogProps {
   onSubmit: () => void
-  selectedTime: number | null
-  selectedDate: Date | null
-  selectedServices: string[]
   services: {
     id: string;
     name: string;
     price: string;
     time: number;
   }[]
-  isLoading: boolean
 }
 
-export const SchedulingConfirmationDialog: React.FC<SchedulingConfirmationDialogProps> = ({ services, selectedDate, selectedTime, selectedServices, onSubmit, isLoading }) => {
+export const SchedulingConfirmationDialog: React.FC<SchedulingConfirmationDialogProps> = ({ services, onSubmit }) => {
   const [searchParams] = useSearchParams();
   const name = searchParams.get('name');
   const phone = searchParams.get('phone');
+
+  const {
+    isPendingConfirmation,
+    selectedDate,
+    selectedServices,
+    selectedTime,
+  } = useBookingContext();
 
   const describedDate = selectedDate
     ? dayjs(selectedDate).locale('pt-br').format('dddd, DD [de] MMMM [de] YYYY')
@@ -137,11 +141,11 @@ export const SchedulingConfirmationDialog: React.FC<SchedulingConfirmationDialog
       <Separator />
       <div className='flex flex-row justify-end gap-2 px-4'>
         <DialogClose asChild>
-          <Button disabled={isLoading} variant={'ghost'}>Voltar</Button>
+          <Button disabled={isPendingConfirmation} variant={'ghost'}>Voltar</Button>
         </DialogClose>
-        <Button disabled={isLoading} onClick={onSubmit} className="min-w-24">
+        <Button disabled={isPendingConfirmation} onClick={onSubmit} className="min-w-24">
           {
-            isLoading
+            isPendingConfirmation
               ?
               <Loading />
               :

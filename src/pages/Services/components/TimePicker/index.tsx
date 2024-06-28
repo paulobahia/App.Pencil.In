@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { DialogTrigger } from "@/components/ui/dialog"
+import { useBookingContext } from "@/hooks/useBookingContext"
 import { convertMinutesToTime } from "@/lib/utils"
 import dayjs from "dayjs"
 import 'dayjs/locale/pt-br'
@@ -70,12 +71,12 @@ const availability: Availability = {
   ]
 }
 
-interface TimePickerProps {
-  selectedDate: Date | null
-  onTimeSelected: (number: number) => void
-}
+export const TimePicker: React.FC = () => {
 
-export const TimePicker: React.FC<TimePickerProps> = ({ selectedDate, onTimeSelected }) => {
+  const {
+    selectedDate,
+    setSelectedTime
+  } = useBookingContext();
 
   const timePickerRef = useRef<HTMLDivElement>(null)
 
@@ -102,7 +103,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({ selectedDate, onTimeSele
           return (
             <DialogTrigger key={hour} asChild>
               <Button
-                onClick={() => onTimeSelected(hour)}
+                onClick={() => setSelectedTime(hour)}
                 key={hour}
                 variant={"outline"}
                 disabled={!availability.availableTimes.includes(hour)}
