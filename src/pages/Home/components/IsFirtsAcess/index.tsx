@@ -2,6 +2,8 @@ import { useEffect, useState } from "react"
 import { FormName, FormPhone, NotificationAuthRequest } from "./components";
 import { RedirectMessage } from "./components/RedirectMessage";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { NotificationDeniedButton } from "@/components";
+import { useNotificationContext } from "@/hooks/useNotificationContext";
 
 interface InfoUser {
   name: string;
@@ -20,7 +22,9 @@ export const IsFirtsAcess = () => {
   const [infoUser, setInfoUser] = useState<InfoUser>({ name: '', phone: '' })
   const [showNotificationAuthRequest, setShowNotificationAuthRequest] = useState<boolean>(false)
   const [showRedirectMessage, setShowRedirectMessage] = useState<boolean>(false)
-  const [isAuthNotification, setIsAuthNotification] = useState<boolean>(false)
+  const [isAuthNotification, setIsAuthNotification] = useState<string>('')
+
+  const { isDeniedNotification } = useNotificationContext()
 
   useEffect(() => {
     const secondMessage = setTimeout(() => {
@@ -57,7 +61,7 @@ export const IsFirtsAcess = () => {
     setShowNotificationAuthRequest(true)
   }
 
-  function handleSubmitNotification(isAuth: boolean) {
+  function handleSubmitNotification(isAuth: string) {
     setShowRedirectMessage(true)
     setIsAuthNotification(isAuth)
 
@@ -69,7 +73,12 @@ export const IsFirtsAcess = () => {
 
   return (
     <>
-      <div className="h-20" />
+      <div className="flex items-center justify-start w-full h-20 py-5" >
+        {
+          isDeniedNotification &&
+          <NotificationDeniedButton />
+        }
+      </div>
       <div className="flex flex-col w-full gap-5">
         <div className="p-4 rounded-md bg-secondary max-w-[80%] w-fit fade-left">
           <span className="font-normal text-center text-white text-[14px]">

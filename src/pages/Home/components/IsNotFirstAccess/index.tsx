@@ -1,13 +1,15 @@
-import { Button } from "@/components/ui/button"
 import { Dialog } from "@/components/ui/dialog"
 import { toast } from 'sonner';
 import { fakeServices } from "@/pages/Services"
 import { AccordionServices, Calendar, SchedulingConfirmationDialog, TimePicker } from "@/pages/Services/components"
 import localforage from "localforage"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { convertMinutesToTime } from "@/lib/utils";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useBookingContext } from "@/hooks/useBookingContext";
+import { Button } from "@/components/ui/button";
+import { NotificationDeniedButton } from "@/components";
+import { useNotificationContext } from "@/hooks/useNotificationContext";
 
 export const IsNotFirstAccess = () => {
   const navigate = useNavigate();
@@ -15,6 +17,11 @@ export const IsNotFirstAccess = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const id = searchParams.get('id');
   const name = searchParams.get('name');
+  const phone = searchParams.get('phone');
+
+  const mySchedulesRef = useRef<HTMLDivElement>(null)
+
+  const { isDeniedNotification } = useNotificationContext()
 
   const {
     isDateSelected,
@@ -64,6 +71,13 @@ export const IsNotFirstAccess = () => {
       })
   }, [setSearchParams])
 
+  useEffect(() => {
+    if (mySchedulesRef.current) {
+      mySchedulesRef.current.focus()
+      mySchedulesRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [])
+
   function handleSchedulingConfirmation() {
     setIsPendingConfirmation(true)
     toast.success('Sucesso', { description: 'Agendamento realizado com sucesso.' })
@@ -73,12 +87,23 @@ export const IsNotFirstAccess = () => {
     reset()
   }
 
+  function goToMyScheduling() {
+    navigate(`/my-schedules?phone=${phone}`)
+    reset()
+  }
+
   return (
     <>
       <Dialog>
-        <div className="flex items-center justify-end w-full h-20 py-5" >
-          <Button>
-            Agendamentos
+        <div className="flex items-center justify-between w-full h-20 py-5" >
+          <div>
+            {
+              isDeniedNotification &&
+              <NotificationDeniedButton />
+            }
+          </div>
+          <Button onClick={goToMyScheduling} className="bg-[#6D28D9] hover:bg-[#6D28D9]/50 text-white font-medium gap-2 flex text-xs w-fit" >
+            MEUS AGENDAMENTOS
           </Button>
         </div>
         <div className="flex flex-col w-full gap-5">

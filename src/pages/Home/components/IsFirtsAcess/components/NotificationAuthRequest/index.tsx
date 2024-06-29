@@ -1,16 +1,19 @@
 import { ActionButton } from "@/components";
+import { useNotificationContext } from "@/hooks/useNotificationContext";
 import { formatPhone } from "@/lib/utils";
 import { useEffect, useRef, useState } from "react";
 
 interface NotificationAuthRequestProps {
   name: string;
   phone: string;
-  onSubmit: (isAuth: boolean) => void
+  onSubmit: (isAuth: string) => void
 }
 
 export const NotificationAuthRequest: React.FC<NotificationAuthRequestProps> = ({ name, phone, onSubmit }) => {
   const [showSecondMessage, setShowSecondMessage] = useState<boolean>(false)
   const [showOptions, setShowOptions] = useState<boolean>(false)
+
+  const { setIsDeniedNotification } = useNotificationContext()
 
   const optionsRef = useRef<HTMLDivElement>(null)
 
@@ -38,9 +41,26 @@ export const NotificationAuthRequest: React.FC<NotificationAuthRequestProps> = (
     }
   }, [showOptions])
 
-  function handleAuthNotification(isAuth: boolean) {
+
+  function requestPermission() {
+    Notification.requestPermission()
+      .then((permission) => {
+        if (permission === "granted") {
+          onSubmit('granted')
+        } else if (permission === "denied") {
+          onSubmit('denied')
+          setIsDeniedNotification(true)
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+      })
     setShowOptions(false)
-    onSubmit(isAuth)
+  }
+
+  function skipRequestPermission() {
+    onSubmit('skip')
+    setShowOptions(false)
   }
 
   return (
@@ -73,10 +93,10 @@ export const NotificationAuthRequest: React.FC<NotificationAuthRequestProps> = (
       {
         showOptions &&
         <div ref={optionsRef} className="flex flex-col gap-5 fade-left">
-          <ActionButton onClick={() => handleAuthNotification(true)}>
+          <ActionButton onClick={requestPermission}>
             Ativar Notificações
           </ActionButton>
-          <ActionButton onClick={() => handleAuthNotification(false)} className="flex w-full gap-2 text-white bg-secondary hover:bg-secondary/50">
+          <ActionButton onClick={skipRequestPermission} className="flex w-full gap-2 text-white bg-secondary hover:bg-secondary/50">
             Pular
           </ActionButton>
         </div>

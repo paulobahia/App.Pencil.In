@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 
 interface RedirectMessageProps {
-  isAuthNotification: boolean
+  isAuthNotification: string
 }
 
 export const RedirectMessage: React.FC<RedirectMessageProps> = ({ isAuthNotification }) => {
@@ -30,23 +30,34 @@ export const RedirectMessage: React.FC<RedirectMessageProps> = ({ isAuthNotifica
   return (
     <>
       {
-        isAuthNotification
-          ?
-          <div className="flex justify-end w-full">
-            <div className="w-fit max-w-[80%] p-4 rounded-md bg-[#6D28D9]">
-              <span className="font-medium text-center text-white text-[14px]">
-                Ativar Notificações
-              </span>
-            </div>
+        isAuthNotification == 'granted' &&
+        <div className="flex justify-end w-full">
+          <div className="w-fit max-w-[80%] p-4 rounded-md bg-[#6D28D9]">
+            <span className="font-normal text-center text-white text-[14px]">
+              Ativar Notificações
+            </span>
           </div>
-          :
-          <div className="flex justify-end w-full">
-            <div className="w-fit max-w-[80%] p-4 rounded-md bg-[#6D28D9]">
-              <span className="font-medium text-center text-white text-[14px]">
-                Pular
-              </span>
-            </div>
+        </div>
+      }
+      {
+        isAuthNotification == 'skip' &&
+        <div className="flex justify-end w-full">
+          <div className="w-fit max-w-[80%] p-4 rounded-md bg-[#6D28D9]">
+            <span className="font-normal text-center text-white text-[14px]">
+              Pular
+            </span>
           </div>
+        </div>
+      }
+      {
+        isAuthNotification == 'denied' &&
+        <div className="flex justify-end w-full">
+          <div className="w-fit max-w-[80%] p-4 rounded-md bg-[#6D28D9]">
+            <span className="font-normal text-center text-white text-[14px]">
+              Notificações Desativadas
+            </span>
+          </div>
+        </div>
       }
       <div className="flex flex-col w-full gap-5">
         <div className="p-4 rounded-md bg-secondary max-w-[80%] w-fit fade-left">
