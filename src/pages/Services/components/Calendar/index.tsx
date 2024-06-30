@@ -23,12 +23,22 @@ export const Calendar: React.FC = () => {
     setSelectedDate,
   } = useBookingContext();
 
-  const [currentDate] = useState(() => { return dayjs().set('date', 1) })
+  const [currentDate, setCurrentDate] = useState(() => { return dayjs().set('date', 1) })
 
   const currentMonth = currentDate.locale('pt-br').format('MMMM')
   const currentYear = currentDate.format('YYYY')
 
   const shortWeekDays = getWeekDays({ short: true })
+
+  function handlePreviousMonth() {
+    const previousMonth = currentDate.subtract(1, 'month')
+    setCurrentDate(previousMonth)
+  }
+
+  function handleNextMonth() {
+    const nextMonth = currentDate.add(1, 'month')
+    setCurrentDate(nextMonth)
+  }
 
   const calendarWeeks = useMemo(() => {
 
@@ -96,7 +106,6 @@ export const Calendar: React.FC = () => {
   }, [currentDate])
 
   function isDateInCurrentMonth(date: dayjs.Dayjs): boolean {
-    const currentDate = dayjs();
     return date.year() === currentDate.year() && date.month() === currentDate.month();
   }
 
@@ -117,10 +126,10 @@ export const Calendar: React.FC = () => {
           {currentMonth} <span>{currentYear}</span>
         </div>
         <div className="flex gap-1 text-neutral-200">
-          <Button variant="link" size={"icon"} title="Previous month" className="leading-none rounded-sm">
+          <Button onClick={handlePreviousMonth} variant="link" size={"icon"} title="Previous month" className="leading-none rounded-sm">
             <ChevronLeft className="size-5" />
           </Button>
-          <Button variant="link" size={"icon"} title="Next month" className="leading-none rounded-sm">
+          <Button onClick={handleNextMonth} variant="link" size={"icon"} title="Next month" className="leading-none rounded-sm">
             <ChevronRight className="size-5" />
           </Button>
         </div>
@@ -143,9 +152,9 @@ export const Calendar: React.FC = () => {
                     <Button
                       onClick={() => setSelectedDate(date.toDate())}
                       disabled={disabled}
-                      className={`absolute top-0 left-0 right-0 w-full mx-auto text-[14px] font-medium bg-secondary hover:bg-[#6D28D9] size-[51px] text-white text-center transition rounded-md disabled:cursor-default disabled:font-normal disabled:bg-transparent ${isSelectedDate(date) ? 'bg-[#6D28D9] hover:bg-[#6D28D9]' : 'bg-secondary hover:bg-secondary'}`}>
+                      className={`absolute top-0 left-0 right-0 w-full mx-auto text-[14px] sm:text-lg font-medium bg-secondary hover:bg-[#6D28D9] size-full text-white text-center transition rounded-md disabled:cursor-default disabled:font-normal disabled:bg-transparent ${isSelectedDate(date) ? 'bg-[#6D28D9] hover:bg-[#6D28D9]' : 'bg-secondary hover:bg-secondary'}`}>
                       {date.get('date')}
-                      {isCurrentDay(date) && <span className="absolute bg-white rounded-full bottom-2 size-1.5" />}
+                      {isCurrentDay(date) && <span className="bg-white absolute bottom-[23%] rounded-full size-[10%]" />}
                     </Button>
                   </div>
                   :
